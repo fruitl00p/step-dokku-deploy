@@ -1,3 +1,3 @@
-name: heroku-deploy
-version: 2.2.1
-description: heroku-deploy step
+name: dokku-deploy
+version: 0.0.1
+description: dokku-deploy step
