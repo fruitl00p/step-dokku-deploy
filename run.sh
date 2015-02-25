@@ -1,14 +1,6 @@
 set -e;
 
 init_wercker_environment_variables() {
-    if [ -z "$WERCKER_DOKKU_DEPLOY_KEY"  ]; then
-        if [ ! -z "$DOKKU_KEY" ]; then
-            export WERCKER_DOKKU_DEPLOY_KEY="$DOKKU_KEY";
-        else
-            fail "Missing or empty option dokku_key. $error_suffix";
-        fi
-    fi
-
     if [ -z "$WERCKER_DOKKU_DEPLOY_APP_NAME" ]; then
         if [ ! -z "$DOKKU_APP_NAME" ]; then
             export WERCKER_DOKKU_DEPLOY_APP_NAME="$DOKKU_APP_NAME";

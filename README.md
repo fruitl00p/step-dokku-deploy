@@ -18,9 +18,10 @@ You should generate a private/public key pair on wercker and manually add the pu
 ``` yaml
 deploy:
     steps:
-        - dokku-deploy:
-            key-name: MY_DEPLOY_KEY
-            dokku-host: dokkuhost.com
+        - gekkie/dokku-deploy@0.0.2:
+           dokku-app-name: your-app-name-on-the-host
+		   dokku-host: the-dokku-host
+		   dokku-deploy-key-name: your-key-as-registered-with-wercker
 ```
 
 In the above example the `MY_DEPLOY_KEY` should match the environment variable name you used in wercker. Note: you should not prefix it with a dollar sign or post fix it with `_PRIVATE` or `_PUBLIC`.
@@ -36,15 +37,20 @@ In the above example the `MY_DEPLOY_KEY` should match the environment variable n
 ``` yaml
 deploy:
     steps:
-        - dokku-deploy:
-            key-name: MY_DEPLOY_KEY
-            dokku-host: dokkuhost.com
+        - gekkie/dokku-deploy@0.0.2:
+           dokku-app-name: node-example
+		   dokku-host: dokkuhost.com
+		   dokku-deploy-key-name: my-node-example-dokku-host-key
 ```
 # License
 
 The MIT License (MIT)
 
 # Changelog
+
+## 0.0.2
+
+* I left a superfluous remnant of the heroku-api key requirement. This has been removed. Also updated the docs for more clarity.
 
 ## 0.0.1
 
