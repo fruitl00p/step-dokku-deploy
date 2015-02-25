@@ -1,3 +1,6 @@
 name: dokku-deploy
-version: 0.0.2
+version: 0.0.3
 description: dokku-deploy step
+keywords:
+  - deploy
+  - dokku
