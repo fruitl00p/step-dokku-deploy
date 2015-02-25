@@ -48,6 +48,10 @@ The MIT License (MIT)
 
 # Changelog
 
+## 0.0.6
+
+* use the identity provided by wercker for testing authentication
+
 ## 0.0.5
 
 * rearranged the setting of authentication before testing it ;)
