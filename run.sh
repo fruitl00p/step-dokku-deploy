@@ -177,10 +177,10 @@ use_new_git_repository() {
 }
 
 test_authentication() {
-#	local gitssh_path="$1";
-#    local dokku_host="$2";
-#    local dokku_user="$3";
-#    local app_name="$4";
+	local gitssh_path="$1";
+    local dokku_host="$2";
+    local dokku_user="$3";
+    local app_name="$4";
 #
 #    set +e;
 #    ssh -t -i $gitssh_path $dokku_user@$dokku_host > /dev/null 2>&1;
