@@ -48,6 +48,10 @@ The MIT License (MIT)
 
 # Changelog
 
+## 0.0.8
+
+* disabled testing by empty function
+
 ## 0.0.7
 
 * disabled the testing of the authentication, i cant get it to work.
