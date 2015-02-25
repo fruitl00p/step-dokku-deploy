@@ -1,25 +1,25 @@
 set -e;
 
 init_wercker_environment_variables() {
-    if [ -z "$WERCKER_DOKKU_DEPLOY_APP_NAME" ]; then
-        if [ -n "$DOKKU_APP_NAME" ]; then
-            export WERCKER_DOKKU_DEPLOY_APP_NAME="$DOKKU_APP_NAME";
+    if [ -z "$GEKKIE_DOKKU_DEPLOY_APP" ]; then
+        if [ -n "$DOKKU_APP" ]; then
+            export GEKKIE_DOKKU_DEPLOY_APP="$DOKKU_APP";
         else
-            fail "Missing or empty option app_name. $error_suffix";
+            fail "Missing or empty option app. $error_suffix";
         fi
     fi
 
-    if [ -z "$WERCKER_DOKKU_DEPLOY_HOST" ]; then
+    if [ -z "$GEKKIE_DOKKU_DEPLOY_HOST" ]; then
         if [ -n "$DOKKU_DEPLOY_HOST" ]; then
-            export WERCKER_DOKKU_DEPLOY_HOST="$DOKKU_DEPLOY_HOST";
+            export GEKKIE_DOKKU_DEPLOY_HOST="$DOKKU_DEPLOY_HOST";
         else
             fail "Missing or empty option host. $error_suffix";
         fi
     fi
 
-    if [ -z "$WERCKER_DOKKU_DEPLOY_HOST_PUBLIC_KEY" ]; then
+    if [ -z "$GEKKIE_DOKKU_DEPLOY_HOST_PUBLIC_KEY" ]; then
      	if [ -n "$DEPLOY_HOST_PUBLIC_KEY" ]; then
-            export WERCKER_DOKKU_DEPLOY_HOST_PUBLIC_KEY="$DEPLOY_HOST_PUBLIC_KEY";
+            export GEKKIE_DOKKU_DEPLOY_HOST_PUBLIC_KEY="$DEPLOY_HOST_PUBLIC_KEY";
             debug "option public_key found. Will add it as the public key";
         else
             debug "option public_key not set. Will deploy to the host ignoring the fingerprint. This could be dangerous!";
@@ -28,28 +28,28 @@ init_wercker_environment_variables() {
         debug "option public_key found. Will add it as the public_key";
     fi
 
-    if [ -z "$WERCKER_DOKKU_DEPLOY_KEY_NAME" ]; then
+    if [ -z "$GEKKIE_DOKKU_DEPLOY_KEY_NAME" ]; then
         if [ -n "$DOKKU_DEPLOY_KEY_NAME" ]; then
-            export WERCKER_DOKKU_DEPLOY_KEY_NAME="$DOKKU_DEPLOY_KEY_NAME";
+            export GEKKIE_DOKKU_DEPLOY_KEY_NAME="$DOKKU_DEPLOY_KEY_NAME";
         else
             fail "Missing or empty option key_name. $error_suffix";
         fi
     fi
 
-    if [ -z "$WERCKER_DOKKU_DEPLOY_USER" ]; then
+    if [ -z "$GEKKIE_DOKKU_DEPLOY_USER" ]; then
         if [ -n "$DOKKU_USER" ]; then
-            export WERCKER_DOKKU_DEPLOY_USER="$DOKKU_USER";
+            export GEKKIE_DOKKU_DEPLOY_USER="$DOKKU_USER";
         else
-            export WERCKER_DOKKU_DEPLOY_USER="dokku";
+            export GEKKIE_DOKKU_DEPLOY_USER="dokku";
         fi
     fi
 
-    if [ -z "$WERCKER_DOKKU_DEPLOY_SOURCE_DIR" ]; then
-        export WERCKER_DOKKU_DEPLOY_SOURCE_DIR="$WERCKER_ROOT";
-        debug "option source_dir not set. Will deploy directory $WERCKER_DOKKU_DEPLOY_SOURCE_DIR";
+    if [ -z "$GEKKIE_DOKKU_DEPLOY_SOURCE_DIR" ]; then
+        export GEKKIE_DOKKU_DEPLOY_SOURCE_DIR="$WERCKER_ROOT";
+        debug "option source_dir not set. Will deploy directory $GEKKIE_DOKKU_DEPLOY_SOURCE_DIR";
     else
         warn "Use of source_dir is deprecated. Please make sure that you fix your dokku deploy version on a major version."
-        debug "option source_dir found. Will deploy directory $WERCKER_DOKKU_DEPLOY_SOURCE_DIR";
+        debug "option source_dir found. Will deploy directory $GEKKIE_DOKKU_DEPLOY_SOURCE_DIR";
     fi
 }
 
@@ -91,13 +91,13 @@ init_gitssh() {
     export GIT_SSH="$gitssh_path";
 }
 
-use_wercker_ssh_key() {
+use_GEKKIE_ssh_key() {
     local ssh_key_path="$1";
-    local wercker_ssh_key_name="$2";
+    local GEKKIE_ssh_key_name="$2";
 
-    debug "will use specified key in key-name option: ${wercker_ssh_key_name}_PRIVATE";
+    debug "will use specified key in key-name option: ${GEKKIE_ssh_key_name}_PRIVATE";
 
-    local private_key=$(eval echo "\$${wercker_ssh_key_name}_PRIVATE");
+    local private_key=$(eval echo "\$${GEKKIE_ssh_key_name}_PRIVATE");
 
     if [ -z "$private_key" ]; then
         fail 'Missing key error. The key-name is specified, but no key with this name could be found. Make sure you generated an key, and exported it as an environment variable.';
@@ -201,49 +201,49 @@ exit_code_run=0;
 
 # Initialize some values
 init_wercker_environment_variables;
-init_ssh "$WERCKER_DOKKU_DEPLOY_HOST_PUBLIC_KEY" "$WERCKER_DOKKU_DEPLOY_HOST";
-init_git "$WERCKER_DOKKU_DEPLOY_USER";
+init_ssh "$GEKKIE_DOKKU_DEPLOY_HOST_PUBLIC_KEY" "$GEKKIE_DOKKU_DEPLOY_HOST";
+init_git "$GEKKIE_DOKKU_DEPLOY_USER";
 init_gitssh "$gitssh_path" "$ssh_key_path";
 
-cd $WERCKER_DOKKU_DEPLOY_SOURCE_DIR || fail "could not change directory to source_dir \"$WERCKER_DOKKU_DEPLOY_SOURCE_DIR\""
+cd $GEKKIE_DOKKU_DEPLOY_SOURCE_DIR || fail "could not change directory to source_dir \"$GEKKIE_DOKKU_DEPLOY_SOURCE_DIR\""
 
 # Test credentials
-use_wercker_ssh_key "$ssh_key_path" "$WERCKER_DOKKU_DEPLOY_KEY_NAME";
-test_authentication "$ssh_key_path" "$WERCKER_DOKKU_DEPLOY_HOST" "$WERCKER_DOKKU_DEPLOY_USER" "$WERCKER_DOKKU_DEPLOY_APP_NAME";
+use_GEKKIE_ssh_key "$ssh_key_path" "$GEKKIE_DOKKU_DEPLOY_KEY_NAME";
+test_authentication "$ssh_key_path" "$GEKKIE_DOKKU_DEPLOY_HOST" "$GEKKIE_DOKKU_DEPLOY_USER" "$GEKKIE_DOKKU_DEPLOY_APP";
 
 # Then check if the user wants to use the git repository or use the files in the source directory
-if [ "$WERCKER_DOKKU_DEPLOY_KEEP_REPOSITORY" == "true" ]; then
-    use_current_git_directory "$WERCKER_DOKKU_DEPLOY_SOURCE_DIR" "$WERCKER_GIT_BRANCH";
+if [ "$GEKKIE_DOKKU_DEPLOY_KEEP_REPOSITORY" == "true" ]; then
+    use_current_git_directory "$GEKKIE_DOKKU_DEPLOY_SOURCE_DIR" "$WERCKER_GIT_BRANCH";
 else
-    use_new_git_repository "$WERCKER_DOKKU_DEPLOY_SOURCE_DIR";
+    use_new_git_repository "$GEKKIE_DOKKU_DEPLOY_SOURCE_DIR";
 fi
 
 # Try to push the code
 set +e;
-push_code "$WERCKER_DOKKU_DEPLOY_HOST" "$WERCKER_DOKKU_DEPLOY_USER" "$WERCKER_DOKKU_DEPLOY_APP_NAME";
+push_code "$GEKKIE_DOKKU_DEPLOY_HOST" "$GEKKIE_DOKKU_DEPLOY_USER" "$GEKKIE_DOKKU_DEPLOY_APP";
 exit_code_push=$?
 set -e;
 
 # Retry pushing the code, if the first push failed and retry was not disabled
 if [ $exit_code_push -ne 0 ]; then
-    if [ "$WERCKER_DOKKU_DEPLOY_RETRY" == "false" ]; then
+    if [ "$GEKKIE_DOKKU_DEPLOY_RETRY" == "false" ]; then
         info "push failed, not going to retry";
     else
         info "push failed, retrying push in 5 seconds";
         sleep 5;
 
         set +e;
-        push_code "$WERCKER_DOKKU_DEPLOY_HOST" "$WERCKER_DOKKU_DEPLOY_USER" "$WERCKER_DOKKU_DEPLOY_APP_NAME";
+        push_code "$GEKKIE_DOKKU_DEPLOY_HOST" "$GEKKIE_DOKKU_DEPLOY_USER" "$GEKKIE_DOKKU_DEPLOY_APP";
         exit_code_push=$?
         set -e;
     fi
 fi
 
 # Run a command, if the push succeeded and the user supplied a run command
-if [ -n "$WERCKER_DOKKU_DEPLOY_RUN" ]; then
+if [ -n "$GEKKIE_DOKKU_DEPLOY_RUN" ]; then
     if [ $exit_code_push -eq 0 ]; then
         set +e;
-        execute_dokku_command "$WERCKER_DOKKU_DEPLOY_HOST" "$WERCKER_DOKKU_DEPLOY_USER" "$WERCKER_DOKKU_DEPLOY_RUN";
+        execute_dokku_command "$GEKKIE_DOKKU_DEPLOY_HOST" "$GEKKIE_DOKKU_DEPLOY_USER" "$GEKKIE_DOKKU_DEPLOY_RUN";
         exit_code_run=$?
         set -e;
     fi
