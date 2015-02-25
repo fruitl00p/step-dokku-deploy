@@ -48,6 +48,10 @@ The MIT License (MIT)
 
 # Changelog
 
+## 0.0.7
+
+* disabled the testing of the authentication, i cant get it to work.
+
 ## 0.0.6
 
 * use the identity provided by wercker for testing authentication

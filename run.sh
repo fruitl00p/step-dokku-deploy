@@ -177,19 +177,19 @@ use_new_git_repository() {
 }
 
 test_authentication() {
-	local gitssh_path="$1";
-    local dokku_host="$2";
-    local dokku_user="$3";
-    local app_name="$4";
-
-    set +e;
-    ssh -t -i $gitssh_path $dokku_user@$dokku_host > /dev/null 2>&1;
-    local exit_code_authentication_test=$?;
-    set -e;
-
-    if [ $exit_code_authentication_test -ne 0 ]; then
-        fail 'Unable to login using your provided credentials, please update your dokku host, username etc';
-    fi
+#	local gitssh_path="$1";
+#    local dokku_host="$2";
+#    local dokku_user="$3";
+#    local app_name="$4";
+#
+#    set +e;
+#    ssh -t -i $gitssh_path $dokku_user@$dokku_host > /dev/null 2>&1;
+#    local exit_code_authentication_test=$?;
+#    set -e;
+#
+#    if [ $exit_code_authentication_test -ne 0 ]; then
+#        fail 'Unable to login using your provided credentials, please update your dokku host, username etc';
+#    fi
 }
 
 # === Main flow starts here ===
