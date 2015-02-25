@@ -19,9 +19,9 @@ You should generate a private/public key pair on wercker and manually add the pu
 deploy:
     steps:
         - gekkie/dokku-deploy@0.0.2:
-           dokku-app-name: your-app-name-on-the-host
-		   dokku-host: the-dokku-host
-		   dokku-deploy-key-name: your-key-as-registered-with-wercker
+           app-name: your-app-name-on-the-host
+		   host: the-dokku-host
+		   key-name: your-key-as-registered-with-wercker
 ```
 
 In the above example the `MY_DEPLOY_KEY` should match the environment variable name you used in wercker. Note: you should not prefix it with a dollar sign or post fix it with `_PRIVATE` or `_PUBLIC`.
@@ -38,9 +38,9 @@ In the above example the `MY_DEPLOY_KEY` should match the environment variable n
 deploy:
     steps:
         - gekkie/dokku-deploy@0.0.2:
-           dokku-app-name: node-example
-		   dokku-host: dokkuhost.com
-		   dokku-deploy-key-name: my-node-example-dokku-host-key
+           app-name: node-example
+		   host: dokkuhost.com
+		   key-name: my-node-example-dokku-host-key
 ```
 # License
 

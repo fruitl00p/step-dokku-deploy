@@ -5,7 +5,7 @@ init_wercker_environment_variables() {
         if [ ! -z "$DOKKU_APP_NAME" ]; then
             export WERCKER_DOKKU_DEPLOY_APP_NAME="$DOKKU_APP_NAME";
         else
-            fail "Missing or empty option dokku_app_name. $error_suffix";
+            fail "Missing or empty option app_name. $error_suffix";
         fi
     fi
 
@@ -13,7 +13,7 @@ init_wercker_environment_variables() {
         if [ ! -z "$DOKKU_DEPLOY_HOST" ]; then
             export $WERCKER_DOKKU_DEPLOY_HOST="$DOKKU_DEPLOY_HOST";
         else
-            fail "Missing or empty option dokku_deploy_host. $error_suffix";
+            fail "Missing or empty option host. $error_suffix";
         fi
     fi
 
@@ -21,7 +21,7 @@ init_wercker_environment_variables() {
         if [ ! -z "$DOKKU_DEPLOY_KEY_NAME" ]; then
             export $WERCKER_DOKKU_DEPLOY_KEY_NAME="$DOKKU_DEPLOY_KEY_NAME";
         else
-            fail "Missing or empty option dokku_deploy_key_name. $error_suffix";
+            fail "Missing or empty option key_name. $error_suffix";
         fi
     fi
 
