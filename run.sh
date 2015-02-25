@@ -207,9 +207,8 @@ init_gitssh "$gitssh_path" "$ssh_key_path";
 cd $WERCKER_DOKKU_DEPLOY_SOURCE_DIR || fail "could not change directory to source_dir \"$WERCKER_DOKKU_DEPLOY_SOURCE_DIR\""
 
 # Test credentials
-test_authentication "$WERCKER_DOKKU_DEPLOY_HOST" "$WERCKER_DOKKU_DEPLOY_USER" "$WERCKER_DOKKU_DEPLOY_APP_NAME";
-
 use_wercker_ssh_key "$ssh_key_path" "$WERCKER_DOKKU_DEPLOY_KEY_NAME";
+test_authentication "$WERCKER_DOKKU_DEPLOY_HOST" "$WERCKER_DOKKU_DEPLOY_USER" "$WERCKER_DOKKU_DEPLOY_APP_NAME";
 
 # Then check if the user wants to use the git repository or use the files in the source directory
 if [ "$WERCKER_DOKKU_DEPLOY_KEEP_REPOSITORY" == "true" ]; then

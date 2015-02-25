@@ -1,5 +1,5 @@
 name: dokku-deploy
-version: 0.0.4
+version: 0.0.5
 description: dokku-deploy step
 keywords:
   - deploy

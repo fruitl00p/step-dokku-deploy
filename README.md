@@ -48,6 +48,10 @@ The MIT License (MIT)
 
 # Changelog
 
+## 0.0.5
+
+* rearranged the setting of authentication before testing it ;)
+
 ## 0.0.4
 
 * Added the option of passing in the public key for the deploy-host
