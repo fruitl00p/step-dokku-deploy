@@ -28,7 +28,7 @@ In the above example the `MY_DEPLOY_KEY` should match the environment variable n
 
 # Options
 
-* `key-name` (optional) Specify the name of the key that should be used for this deployment.
+* `host-public-key` (optional) This is the public key for the host your deploying to. If left out this will ignore the host public key. **Important:** Leaving this out might be seen as a security risk due to the fact that host key checking will be disabled leaving your app open for MITM attacks via DNS tainting.
 * `retry` (optional) When a deploy to dokku fails, a new deploy is automatically performed after 5 seconds. If you want to disable this behavior, set `retry` to `false`.
 * `keep-repository` (optional) This will allow a user to keep the original history of the repository, speeding up deployment. **Important:** changes made during the build will not be deployed. Also keep in mind that deploying an already up to date repo will not result in an application restart. Use the `run` parameter to forcibly reload to achieve this. This feature is considered beta, expect issues. If you find one, please contact us.
 
@@ -47,6 +47,14 @@ deploy:
 The MIT License (MIT)
 
 # Changelog
+
+## 0.0.4
+
+* Added the option of passing in the public key for the deploy-host
+
+## 0.0.3
+
+* just added a few keywords
 
 ## 0.0.2
 

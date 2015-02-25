@@ -2,7 +2,7 @@ set -e;
 
 init_wercker_environment_variables() {
     if [ -z "$WERCKER_DOKKU_DEPLOY_APP_NAME" ]; then
-        if [ ! -z "$DOKKU_APP_NAME" ]; then
+        if [ -n "$DOKKU_APP_NAME" ]; then
             export WERCKER_DOKKU_DEPLOY_APP_NAME="$DOKKU_APP_NAME";
         else
             fail "Missing or empty option app_name. $error_suffix";
@@ -10,23 +10,34 @@ init_wercker_environment_variables() {
     fi
 
     if [ -z "$WERCKER_DOKKU_DEPLOY_HOST" ]; then
-        if [ ! -z "$DOKKU_DEPLOY_HOST" ]; then
-            export $WERCKER_DOKKU_DEPLOY_HOST="$DOKKU_DEPLOY_HOST";
+        if [ -n "$DOKKU_DEPLOY_HOST" ]; then
+            export WERCKER_DOKKU_DEPLOY_HOST="$DOKKU_DEPLOY_HOST";
         else
             fail "Missing or empty option host. $error_suffix";
         fi
     fi
 
+    if [ -z "$WERCKER_DOKKU_DEPLOY_HOST_PUBLIC_KEY" ]; then
+     	if [ -n "$DEPLOY_HOST_PUBLIC_KEY" ]; then
+            export WERCKER_DOKKU_DEPLOY_HOST_PUBLIC_KEY="$DEPLOY_HOST_PUBLIC_KEY";
+            debug "option public_key found. Will add it as the public key";
+        else
+            debug "option public_key not set. Will deploy to the host ignoring the fingerprint. This could be dangerous!";
+        fi
+    else
+        debug "option public_key found. Will add it as the public_key";
+    fi
+
     if [ -z "$WERCKER_DOKKU_DEPLOY_KEY_NAME" ]; then
-        if [ ! -z "$DOKKU_DEPLOY_KEY_NAME" ]; then
-            export $WERCKER_DOKKU_DEPLOY_KEY_NAME="$DOKKU_DEPLOY_KEY_NAME";
+        if [ -n "$DOKKU_DEPLOY_KEY_NAME" ]; then
+            export WERCKER_DOKKU_DEPLOY_KEY_NAME="$DOKKU_DEPLOY_KEY_NAME";
         else
             fail "Missing or empty option key_name. $error_suffix";
         fi
     fi
 
     if [ -z "$WERCKER_DOKKU_DEPLOY_USER" ]; then
-        if [ ! -z "$DOKKU_USER" ]; then
+        if [ -n "$DOKKU_USER" ]; then
             export WERCKER_DOKKU_DEPLOY_USER="$DOKKU_USER";
         else
             export WERCKER_DOKKU_DEPLOY_USER="dokku";
@@ -43,9 +54,17 @@ init_wercker_environment_variables() {
 }
 
 init_ssh() {
+ 	local public_key="$1";
+ 	local host="$2";
+
     mkdir -p $HOME/.ssh;
-    touch $HOME/.ssh/known_hosts;
-    chmod 600 $HOME/.ssh/known_hosts;
+    if [ -n "$public_key" ]; then
+		touch $HOME/.ssh/known_hosts;
+		chmod 600 $HOME/.ssh/known_hosts;
+    	echo $public_key >> $HOME/.ssh/known_hosts;
+	else
+		echo -e "Host $host\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+	fi
 }
 
 init_git() {
@@ -80,7 +99,7 @@ use_wercker_ssh_key() {
 
     local private_key=$(eval echo "\$${wercker_ssh_key_name}_PRIVATE");
 
-    if [ ! -n "$private_key" ]; then
+    if [ -z "$private_key" ]; then
         fail 'Missing key error. The key-name is specified, but no key with this name could be found. Make sure you generated an key, and exported it as an environment variable.';
     fi
 
@@ -181,7 +200,7 @@ exit_code_run=0;
 
 # Initialize some values
 init_wercker_environment_variables;
-init_ssh;
+init_ssh "$WERCKER_DOKKU_DEPLOY_HOST_PUBLIC_KEY" "$WERCKER_DOKKU_DEPLOY_HOST";
 init_git "$WERCKER_DOKKU_DEPLOY_USER";
 init_gitssh "$gitssh_path" "$ssh_key_path";
 
