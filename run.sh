@@ -177,12 +177,13 @@ use_new_git_repository() {
 }
 
 test_authentication() {
-    local dokku_host="$1";
-    local dokku_user="$2";
-    local app_name="$3";
+	local gitssh_path="$1";
+    local dokku_host="$2";
+    local dokku_user="$3";
+    local app_name="$4";
 
     set +e;
-    ssh -t $dokku_user@$dokku_host > /dev/null 2>&1;
+    ssh -t -i $gitssh_path $dokku_user@$dokku_host > /dev/null 2>&1;
     local exit_code_authentication_test=$?;
     set -e;
 
@@ -208,7 +209,7 @@ cd $WERCKER_DOKKU_DEPLOY_SOURCE_DIR || fail "could not change directory to sourc
 
 # Test credentials
 use_wercker_ssh_key "$ssh_key_path" "$WERCKER_DOKKU_DEPLOY_KEY_NAME";
-test_authentication "$WERCKER_DOKKU_DEPLOY_HOST" "$WERCKER_DOKKU_DEPLOY_USER" "$WERCKER_DOKKU_DEPLOY_APP_NAME";
+test_authentication "$ssh_key_path" "$WERCKER_DOKKU_DEPLOY_HOST" "$WERCKER_DOKKU_DEPLOY_USER" "$WERCKER_DOKKU_DEPLOY_APP_NAME";
 
 # Then check if the user wants to use the git repository or use the files in the source directory
 if [ "$WERCKER_DOKKU_DEPLOY_KEEP_REPOSITORY" == "true" ]; then
