@@ -48,6 +48,10 @@ The MIT License (MIT)
 
 # Changelog
 
+## 0.0.10
+
+* reverted previous naming change.
+
 ## 0.0.9
 
 * updated the various environment variables to reflect the naming scheme `owner_step_param`
